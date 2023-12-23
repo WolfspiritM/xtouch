@@ -65,6 +65,8 @@ extern "C"
         XTOUCH_FIRMWARE_UPDATE,
         XTOUCH_FIRMWARE_UPDATE_PROGRESS,
 
+        XTOUCH_LOAD_SDCARD,
+
     };
 
     struct XTOUCH_MESSAGE_DATA

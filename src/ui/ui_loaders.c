@@ -35,6 +35,9 @@ void fillScreenData(int screen)
     case 2:
         sendMqttMsg(XTOUCH_CONTROL_INC_SWITCH, controlMode.inc);
         break;
+    case 7:
+        lv_msg_send(XTOUCH_LOAD_SDCARD, NULL);
+        break;
     }
 }
 
@@ -81,6 +84,10 @@ void loadScreen(int screen)
     case 6:
         ui_accessCodeScreen_screen_init();
         lv_disp_load_scr(ui_accessCodeScreen);
+        break;
+    case 7:
+        ui_sdcardScreen_screen_init();
+        lv_disp_load_scr(ui_sdcardScreen);
         break;
     }
 

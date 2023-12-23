@@ -98,6 +98,11 @@ void xtouch_events_onChamberTempSwitch(lv_msg_t *m)
     }
 }
 
+void xtouch_events_load_sdcard(lv_msg_t *m)
+{
+  xtouch_ftps_connect("10.0.11.173", 990, "bblp", "accessCode");
+}
+
 void xtouch_setupGlobalEvents()
 {
     lv_msg_subscribe(XTOUCH_SETTINGS_RESET_DEVICE, (lv_msg_subscribe_cb_t)xtouch_events_onResetDevice, NULL);
@@ -112,6 +117,8 @@ void xtouch_setupGlobalEvents()
     lv_msg_subscribe(XTOUCH_SETTINGS_SAVE, (lv_msg_subscribe_cb_t)xtouch_events_onSettingsSave, NULL);
     lv_msg_subscribe(XTOUCH_SETTINGS_CHAMBER_TEMP, (lv_msg_subscribe_cb_t)xtouch_events_onChamberTempSwitch, NULL);
     lv_msg_subscribe(XTOUCH_SETTINGS_TFT_FLIP, (lv_msg_subscribe_cb_t)xtouch_events_onTFTFlip, NULL);
+    
+    lv_msg_subscribe(XTOUCH_LOAD_SDCARD, (lv_msg_subscribe_cb_t)xtouch_events_load_sdcard, NULL);
 }
 
 #endif
