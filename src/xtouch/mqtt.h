@@ -7,6 +7,7 @@
 #include <ArduinoJson.h>
 #include "ui/ui_msgs.h"
 #include "types.h"
+#include "custom_stream.h"
 
 WiFiClientSecure xtouch_wiFiClientSecure;
 PubSubClient xtouch_pubSubClient(xtouch_wiFiClientSecure);
@@ -785,6 +786,13 @@ void xtouch_mqtt_connect()
     }
 }
 
+CustomStream stream;
+
+void callback(char* topic, byte* payload, unsigned int length) {
+    xtouch_mqtt_parseMessage(topic, (byte*)stream.get_buffer(), stream.current_length());
+    stream.flush();
+}
+
 void xtouch_mqtt_setup()
 {
     lv_label_set_text(introScreenCaption, LV_SYMBOL_CHARGE " Connecting to Printer");
@@ -802,9 +810,16 @@ void xtouch_mqtt_setup()
     xtouch_mqtt_topic_setup();
 
     xtouch_wiFiClientSecure.setInsecure();
-    xtouch_pubSubClient.setBufferSize(XTOUCH_MQTT_SERVER_BUFFER_SIZE);
+    
     xtouch_pubSubClient.setServer(ip, 8883);
-    xtouch_pubSubClient.setCallback(xtouch_mqtt_parseMessage);
+
+
+
+    // xtouch_pubSubClient.setBufferSize(XTOUCH_MQTT_SERVER_BUFFER_SIZE);
+    // xtouch_pubSubClient.setCallback(xtouch_mqtt_parseMessage);
+
+    xtouch_pubSubClient.setStream(stream);
+    xtouch_pubSubClient.setCallback(callback);
     xtouch_pubSubClient.setSocketTimeout(XTOUCH_MQTT_SERVER_TIMEOUT);
 
     /* home */
