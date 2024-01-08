@@ -1,6 +1,7 @@
 #ifndef _XLCD_CONNECTION
 #define _XLCD_CONNECTION
 
+
 bool xtouch_wifi_setup()
 {
     DynamicJsonDocument wifiConfig = xtouch_filesystem_readJson(SD, xtouch_paths_wifi);
@@ -18,7 +19,7 @@ bool xtouch_wifi_setup()
 
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid, password);
-    ConsoleInfo.println(F("[XTOUCH][CONNECTION] Connecting to WiFi .."));
+    ConsoleInfo("[XTOUCH][CONNECTION]", "Connecting to WiFi ..");
 
     lv_label_set_text(introScreenCaption, LV_SYMBOL_WIFI " Connecting");
     lv_obj_set_style_text_color(introScreenCaption, lv_color_hex(0x555555), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -61,7 +62,7 @@ bool xtouch_wifi_setup()
             break;
         }
 
-        if (statusText != "")
+        if (statusText != 0)
         {
 
             lv_label_set_text(introScreenCaption, statusText);
@@ -89,8 +90,7 @@ bool xtouch_wifi_setup()
     lv_timer_handler();
     lv_task_handler();
     delay(1000);
-    ConsoleInfo.print(F("[XTOUCH][CONNECTION] Connected to the WiFi network with IP: "));
-    ConsoleInfo.println(WiFi.localIP());
+    ConsoleInfoPrintf("[XTOUCH][CONNECTION]", "Connected to the WiFi network with IP: %s", WiFi.localIP().toString().c_str());
 
     return true;
 }

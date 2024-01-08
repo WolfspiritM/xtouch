@@ -14,7 +14,7 @@ bool xtouch_sdcard_setup()
         lv_obj_set_style_text_color(introScreenCaption, lv_color_hex(0xFF0000), LV_PART_MAIN | LV_STATE_DEFAULT);
         lv_timer_handler();
 
-        ConsoleError.println("[XTouch][SD] Card Mount Failed");
+        ConsoleError("[XTouch][SD]", "Card Mount Failed");
         return false;
     }
 
@@ -24,31 +24,29 @@ bool xtouch_sdcard_setup()
 
     if (cardType == CARD_NONE)
     {
-        ConsoleError.println("[XTouch][SD] No SD card attached");
+        ConsoleError("[XTouch][SD]", "No SD card attached");
         return false;
     }
 
-    ConsoleInfo.print("XTouch][SD] SD Card Type: ");
-
     if (cardType == CARD_MMC)
     {
-        ConsoleInfo.println("[XTouch][SD] MMC");
+        ConsoleInfoPrintf("[XTouch][SD]", "SD Card Type: %s", "MMC");
     }
     else if (cardType == CARD_SD)
     {
-        ConsoleInfo.println("[XTouch][SD] SDSC");
+        ConsoleInfoPrintf("[XTouch][SD]", "SD Card Type: %s", "SDSC");
     }
     else if (cardType == CARD_SDHC)
     {
-        ConsoleInfo.println("[XTouch][SD] SDHC");
+        ConsoleInfoPrintf("[XTouch][SD]", "SD Card Type: %s", "SDHC");
     }
     else
     {
-        ConsoleInfo.println("[XTouch][SD] UNKNOWN");
+        ConsoleInfoPrintf("[XTouch][SD]", "SD Card Type: %s", "UNKNOWN");
     }
 
     uint64_t cardSize = SD.cardSize() / (1024 * 1024);
-    ConsoleInfo.printf("[XTouch][SD] SD Card Size: %lluMB\n", cardSize);
+    ConsoleInfoPrintf("[XTouch][SD]", "SD Card Size: %lluMB", cardSize);
     xtouch_filesystem_mkdir(SD, xtouch_paths_root);
 
     return true;

@@ -2,3 +2,7 @@
 .vscode
 .DS_Store
 node_modules
+build
+sdkconfig
+sdkconfig.*
+!sdkconfig.defaults

@@ -91,7 +91,7 @@ void xtouch_ssdp_load_pair()
 
 void xtouch_ssdp_unpair()
 {
-    ConsoleInfo.println("[XTOUCH][SSDP] Unpairing device");
+    ConsoleInfo("[XTouch][SSDP]", "Unpairing device");
     DynamicJsonDocument pairFile = xtouch_filesystem_readJson(SD, xtouch_paths_pair, false);
     pairFile.remove("paired");
     xtouch_filesystem_writeJson(SD, xtouch_paths_pair, pairFile);
@@ -100,7 +100,7 @@ void xtouch_ssdp_unpair()
 
 void xtouch_ssdp_save_pair(String usn, String accessCode)
 {
-    ConsoleInfo.println("[XTOUCH][SSDP] Saving AccessCode Pair");
+    ConsoleInfo("[XTouch][SSDP]", "Saving AccessCode Pair");
     DynamicJsonDocument doc = xtouch_filesystem_readJson(SD, xtouch_paths_pair, false);
 
     doc["paired"] = usn.c_str();

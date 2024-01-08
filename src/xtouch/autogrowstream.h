@@ -26,7 +26,7 @@ public:
   operator const char *() const { return (const char*)NULL; }
 
   // Get the current length of data in the buffer
-  const uint16_t current_length() const { return _len; }
+  uint16_t current_length() const { return _len; }
 
   // Stream-related methods
   bool listen() { return true; }

@@ -57,7 +57,7 @@ const char *ui_hmsPanel_xtouch_errors_getHMSError(unsigned long long prefix)
 const char *ui_hmsPanel_deviceHMSError(unsigned long long prefix)
 {
     char prefix_str[9];
-    sprintf(prefix_str, "%08X", (unsigned long long)prefix);
+    sprintf(prefix_str, "%llX", (unsigned long long)prefix);
 
     return xtouch_errors_getDeviceError(prefix_str);
 }
@@ -78,7 +78,7 @@ void ui_hmsPanelComponent_onXTouchHMSError(lv_event_t *e)
                 bool hasRetry = xtouch_errors_deviceErrorHasRetry(ui_hmsPanel_currentErrorString);
                 bool hasDone = xtouch_errors_deviceErrorHasDone(ui_hmsPanel_currentErrorString);
                 const char *error = ui_hmsPanel_deviceHMSError(ui_hmsPanel_currentError);
-                if (error != "")
+                if (*error != 0)
                 {
                     ui_hmsPanel_show(error,
                                      hasRetry ? (hasDone ? DONE_AND_RETRY : CONFIRM_AND_RETRY) : (hasDone ? CONFIRM_AND_DONE : ONLY_CONFIRM));
@@ -96,7 +96,7 @@ void ui_hmsPanelComponent_onXTouchHMSError(lv_event_t *e)
                 switch (reversed_msg_level)
                 {
                 case HMS_INFO:
-                    if (error != "")
+                    if (error != 0)
                     {
                         ui_hmsPanel_show(error, ONLY_CONFIRM);
                     }

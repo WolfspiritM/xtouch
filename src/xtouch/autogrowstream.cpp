@@ -1,5 +1,6 @@
 #include "autogrowstream.h"
 #include <Arduino.h>
+#include "debug.h"
 
 #define BUFFER_INCREMENTS 128
 
@@ -25,7 +26,7 @@ size_t XtouchAutoGrowBufferStream::write(uint8_t byte) {
         // Check if the buffer growing operation was successful
         if (tmp == NULL) {
             // Print an error message if buffer growth fails due to memory error
-            Serial.println("Failed to grow buffer");
+            ConsoleError("[XTouch][AutoGrowBufferStream]", "Failed to grow buffer");
             return 0; // Indicate failure to write
         }
 

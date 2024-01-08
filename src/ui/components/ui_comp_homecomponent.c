@@ -224,6 +224,8 @@ int printingLevelToIndex(int lvl)
     case XTOUCH_SPEED_LEVEL_RAMPAGE:
         return 3;
     }
+
+    return 0;
 }
 
 void onXTouchPrintStatus(lv_event_t *e)

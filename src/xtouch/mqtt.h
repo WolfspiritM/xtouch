@@ -72,7 +72,7 @@ void xtouch_mqtt_update_slice_info(const char *project_id, const char *profile_i
 
 void xtouch_mqtt_processPushStatus(JsonDocument &incomingJson)
 {
-    ConsoleDebug.println(F("[XTouch][MQTT] ProcessPushStatus"));
+    ConsoleDebug("[XTouch][MQTT]", "ProcessPushStatus");
 
     if (incomingJson != NULL && incomingJson.containsKey("print"))
     {
@@ -84,7 +84,7 @@ void xtouch_mqtt_processPushStatus(JsonDocument &incomingJson)
         }
         if (incomingJson["print"].containsKey("home_flag"))
         {
-            bambuStatus.home_flag, incomingJson["print"]["home_flag"].as<int>();
+            bambuStatus.home_flag = incomingJson["print"]["home_flag"].as<int>();
         }
 
         if (incomingJson["print"].containsKey("hw_switch_state"))
@@ -563,7 +563,7 @@ void xtouch_mqtt_processPushStatus(JsonDocument &incomingJson)
                     }
                 }
 
-                if (bambuStatus.ams_exist_bits != last_ams_exist_bits || last_tray_exist_bits != last_tray_exist_bits || bambuStatus.tray_is_bbl_bits != last_is_bbl_bits || bambuStatus.tray_read_done_bits != last_read_done_bits || last_ams_version != bambuStatus.ams_version)
+                if (bambuStatus.ams_exist_bits != last_ams_exist_bits || bambuStatus.tray_exist_bits != last_tray_exist_bits || bambuStatus.tray_is_bbl_bits != last_is_bbl_bits || bambuStatus.tray_read_done_bits != last_read_done_bits || last_ams_version != bambuStatus.ams_version)
                 {
                     bambuStatus.is_ams_need_update = true;
                     xtouch_mqtt_sendMsg(XTOUCH_ON_AMS_BITS, 0);
@@ -599,7 +599,7 @@ void xtouch_mqtt_processPushStatus(JsonDocument &incomingJson)
 void xtouch_mqtt_parseMessage(char *topic, byte *payload, unsigned int length, byte type = 0)
 {
 
-    ConsoleDebug.println(F("[XTouch][MQTT] ParseMessage"));
+    ConsoleDebug("[XTouch][MQTT]", "ParseMessage");
     DynamicJsonDocument incomingJson(XTOUCH_MQTT_SERVER_JSON_PARSE_SIZE);
 
     DynamicJsonDocument amsFilter(128);
@@ -624,8 +624,7 @@ void xtouch_mqtt_parseMessage(char *topic, byte *payload, unsigned int length, b
             }
             else if (command == "gcode_line")
             {
-                ConsoleDebug.println(F("[XTouch][MQTT] gcode_line ack"));
-                ConsoleDebug.println(String((char *)payload));
+                ConsoleDebugPrintf("[XTouch][MQTT]", "gcode_line ack %s", (char *)payload);
             }
 
             // project_file
@@ -663,7 +662,7 @@ void xtouch_mqtt_parseMessage(char *topic, byte *payload, unsigned int length, b
     }
     else
     {
-        ConsoleError.println(F("[XTouch][MQTT] ParseMessage deserializeJson failed"));
+        ConsoleError("[XTouch][MQTT]", "ParseMessage deserializeJson failed");
     }
 }
 
@@ -707,7 +706,7 @@ void xtouch_mqtt_onMqttReady()
 void xtouch_mqtt_connect()
 {
 
-    ConsoleInfo.println(F("[XTouch][MQTT] Connecting"));
+    ConsoleInfo("[XTouch][MQTT]", "Connecting");
 
     if (!xtouch_mqtt_firstConnectionDone)
     {
@@ -724,7 +723,7 @@ void xtouch_mqtt_connect()
         String clientId = "XTOUCH-CLIENT-" + String(xtouch_mqtt_generateRandomKey(16));
         if (xtouch_pubSubClient.connect(clientId.c_str(), "bblp", xTouchConfig.xTouchAccessCode))
         {
-            ConsoleInfo.println(F("[XTouch][MQTT] ---- CONNECTED ----"));
+            ConsoleInfo("[XTouch][MQTT]", "---- CONNECTED ----");
 
             xtouch_pubSubClient.subscribe(xtouch_mqtt_report_topic.c_str());
             xtouch_device_pushall();
@@ -734,7 +733,7 @@ void xtouch_mqtt_connect()
         }
         else
         {
-            ConsoleError.printf("[XTouch][MQTT] ---- CONNECTION FAIL ----: %d\n", xtouch_pubSubClient.state());
+            ConsoleErrorPrintf("[XTouch][MQTT]", "---- CONNECTION FAIL ----: %d", xtouch_pubSubClient.state());
 
             switch (xtouch_pubSubClient.state())
             {
@@ -861,7 +860,7 @@ void xtouch_mqtt_loop()
 {
     if (!xtouch_pubSubClient.connected())
     {
-        Serial.println("π-----DISCONNECTED-----");
+        ConsoleError("[XTouch][MQTT]", "---- DISCONNECTED ----");
         xtouch_mqtt_connect();
         return;
     }
